@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 export default function App() {
 	const questions = [
 		{
+			id: 1,
 			questionText: 'The iPhone was created by which company?',
 			answerOptions: [
 				{ answerText: 'Apple', isCorrect: true },
@@ -12,6 +13,7 @@ export default function App() {
 			],
 		},
 		{
+			id: 2,
 			questionText: 'What is the capital of Nigeria?',
 			answerOptions: [
 				{ answerText: 'New York', isCorrect: false },
@@ -21,6 +23,7 @@ export default function App() {
 			],
 		},
 		{
+			id: 3,
 			questionText: 'Who is CEO of Dangote Cement?',
 			answerOptions: [
 				{ answerText: 'Jeff Bezos', isCorrect: false },
@@ -30,6 +33,7 @@ export default function App() {
 			],
 		},
 		{
+			id: 4,
 			questionText: 'How many Harry Potter books are there?',
 			answerOptions: [
 				{ answerText: '1', isCorrect: false },
@@ -45,13 +49,22 @@ export default function App() {
 	const [score, setScore] = useState(0);
 	const [showNextButton, setShowNextButton] = useState(false);
 	const [instrButton, setInstrButton] = useState("Next");
-
+	const [failedQuestionIds, setFailedQuestionIds] = useState([]);
 	const [isActive, setIsActive] = useState(false);
 
-	const handleAnswerOptionClick = (isCorrect, highlightedAnwser) => {
+
+	const res = questions.filter(question =>
+		// do a check if the filtered question is inside the failedQuestionIds array then filter the failed question
+		failedQuestionIds.includes(question.id)
+	);
+
+
+	const handleAnswerOptionClick = (isCorrect, highlightedAnwser, questionId) => {
 
 		if (isCorrect) {
 			setScore(score + 1);
+		} else {
+			setFailedQuestionIds((ids) => [...ids, questionId]);
 		}
 		setShowNextButton(true);
 		setIsActive(highlightedAnwser);
@@ -80,12 +93,28 @@ export default function App() {
 		<>
 			<div className='apps'>
 				{showScore ? (
-					<div className='app'>
+					<div className='appz'>
 						<div className='score-section'>
 							You scored {score} out of {questions.length}
-							<button onClick={restartQuestion}>Restart Quiz</button>
+
 
 						</div>
+						<button onClick={restartQuestion}>Restart Quiz</button>
+
+						{res.map(failedQues => (
+							<div className='failed-ans' key={failedQues.id}>
+								<span className='failed-ans'>{failedQues.id}
+
+									&nbsp;&nbsp;&nbsp;&nbsp;<p>{failedQues.questionText}</p>
+									<br />
+									&nbsp;&nbsp;&nbsp;&nbsp;<p>{failedQues.answerOptions.find((failedAns) => (
+										failedAns.isCorrect === true
+									)).answerText}</p>
+
+								</span>
+
+							</div>
+						))}
 
 					</div>
 				) : (<>
@@ -98,7 +127,7 @@ export default function App() {
 						</div>
 						<div className='answer-section'>
 							{questions[currentQuestion].answerOptions.map((answerOption, index) => (
-								<button key={index} className={index === isActive ? 'bg-salmon' : ""} onClick={() => handleAnswerOptionClick(answerOption.isCorrect, index)}>{answerOption.answerText}</button>
+								<button key={index} className={index === isActive ? 'bg-salmon' : ""} onClick={() => handleAnswerOptionClick(answerOption.isCorrect, index, questions[currentQuestion].id)}>{answerOption.answerText}</button>
 							))}
 						</div>
 					</div>
