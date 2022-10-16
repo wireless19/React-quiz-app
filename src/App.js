@@ -53,24 +53,32 @@ export default function App() {
 	const [isActive, setIsActive] = useState(false);
 
 
-	const res = questions.filter(question =>
-		// do a check if the filtered question is inside the failedQuestionIds array then filter the failed question
+	const failedQuestions = questions.filter(question =>
+		// do a check if the filtered question.id (which is each object inside the question array) is inside the failedQuestionIds array, so if the filtered question.id is inside the failedQuestionIds array then it is a failed question then filter the failed question
 		failedQuestionIds.includes(question.id)
 	);
 
 
 	const handleAnswerOptionClick = (isCorrect, highlightedAnwser, questionId) => {
 
-		if (isCorrect) {
+		if (isCorrect === true) {
 			setScore(score + 1);
-		} else {
+		}
+		else {
 			setFailedQuestionIds((ids) => [...ids, questionId]);
 		}
+
 		setShowNextButton(true);
 		setIsActive(highlightedAnwser);
 	};
 
+
+
 	function handleNextQuestion() {
+
+		// if (!handleAnswerOptionClick()) {
+		// 	setFailedQuestionIds((ids) => [...ids, questionId]);
+		// }
 		const nextQuestion = currentQuestion + 1;
 		if (nextQuestion < questions.length) {
 			setCurrentQuestion(nextQuestion);
@@ -89,6 +97,8 @@ export default function App() {
 		window.location.reload(false);
 	}
 
+
+
 	return (
 		<>
 			<div className='apps'>
@@ -101,7 +111,7 @@ export default function App() {
 						</div>
 						<button onClick={restartQuestion}>Restart Quiz</button>
 
-						{res.map(failedQues => (
+						{failedQuestions.map(failedQues => (
 							<div className='failed-ans' key={failedQues.id}>
 								<span className='failed-ans'>{failedQues.id}
 
@@ -111,6 +121,9 @@ export default function App() {
 										failedAns.isCorrect === true
 									)).answerText}</p>
 
+									{/* {console.log(failedQues.answerOptions.find((failedAns) => (
+										failedAns.isCorrect
+									)).answerText)} */}
 								</span>
 
 							</div>
@@ -121,6 +134,7 @@ export default function App() {
 					<div className='app'>
 						<div className='question-section'>
 							<div className='question-count'>
+
 								<span>Question {currentQuestion + 1}</span>/{questions.length}
 							</div>
 							<div className='question-text'>{questions[currentQuestion].questionText}</div>
@@ -135,6 +149,7 @@ export default function App() {
 					<div className="instrubutton">
 						{showNextButton && <button onClick={handleNextQuestion}>{instrButton}</button>}
 					</div>
+
 				</>
 				)}
 			</div>
