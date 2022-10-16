@@ -76,9 +76,6 @@ export default function App() {
 
 	function handleNextQuestion() {
 
-		// if (!handleAnswerOptionClick()) {
-		// 	setFailedQuestionIds((ids) => [...ids, questionId]);
-		// }
 		const nextQuestion = currentQuestion + 1;
 		if (nextQuestion < questions.length) {
 			setCurrentQuestion(nextQuestion);
