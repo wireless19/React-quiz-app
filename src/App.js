@@ -6,8 +6,8 @@ export default function App() {
 			id: 1,
 			questionText: 'The iPhone was created by which company?',
 			answerOptions: [
-				{ answerText: 'Apple', isCorrect: true },
 				{ answerText: 'Intel', isCorrect: false },
+				{ answerText: 'Apple', isCorrect: true },
 				{ answerText: 'Amazon', isCorrect: false },
 				{ answerText: 'Microsoft', isCorrect: false },
 			],
@@ -47,7 +47,6 @@ export default function App() {
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [showScore, setShowScore] = useState(false);
 	const [score, setScore] = useState(0);
-	const [showNextButton, setShowNextButton] = useState(false);
 	const [instrButton, setInstrButton] = useState("Next");
 	const [failedQuestionIds, setFailedQuestionIds] = useState([]);
 	const [isActive, setIsActive] = useState(false);
@@ -68,7 +67,7 @@ export default function App() {
 			setFailedQuestionIds((ids) => [...ids, questionId]);
 		}
 
-		setShowNextButton(true);
+
 		setIsActive(highlightedAnwser);
 	};
 
@@ -88,12 +87,12 @@ export default function App() {
 		}
 
 		setIsActive(false);
+
 	}
 
 	function restartQuestion() {
 		window.location.reload(false);
 	}
-
 
 
 	return (
@@ -108,7 +107,10 @@ export default function App() {
 						</div>
 						<button onClick={restartQuestion}>Restart Quiz</button>
 
+						{score !== 4 ? <p><b>Below are the answer(s) to the questions you failed</b></p> : null}
+
 						{failedQuestions.map(failedQues => (
+
 							<div className='failed-ans' key={failedQues.id}>
 								<span className='failed-ans'>{failedQues.id}
 
@@ -118,9 +120,6 @@ export default function App() {
 										failedAns.isCorrect === true
 									)).answerText}</p>
 
-									{/* {console.log(failedQues.answerOptions.find((failedAns) => (
-										failedAns.isCorrect
-									)).answerText)} */}
 								</span>
 
 							</div>
@@ -138,15 +137,15 @@ export default function App() {
 						</div>
 						<div className='answer-section'>
 							{questions[currentQuestion].answerOptions.map((answerOption, index) => (
-								<button key={index} className={index === isActive ? 'bg-salmon' : ""} onClick={() => handleAnswerOptionClick(answerOption.isCorrect, index, questions[currentQuestion].id)}>{answerOption.answerText}</button>
+								<button key={index} className={index === isActive ? 'bg-salmon' : null} onClick={() => handleAnswerOptionClick(answerOption.isCorrect, index, questions[currentQuestion].id)}>{answerOption.answerText}</button>
 							))}
 						</div>
 					</div>
 					<br />
 					<div className="instrubutton">
-						{showNextButton && <button onClick={handleNextQuestion}>{instrButton}</button>}
-					</div>
 
+						<button disabled={!isActive} onClick={handleNextQuestion}>{instrButton}</button>
+					</div>
 				</>
 				)}
 			</div>
