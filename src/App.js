@@ -67,7 +67,6 @@ export default function App() {
 			setFailedQuestionIds((ids) => [...ids, questionId]);
 		}
 
-
 		setIsActive(highlightedAnwser);
 	};
 
@@ -102,8 +101,6 @@ export default function App() {
 					<div className='appz'>
 						<div className='score-section'>
 							You scored {score} out of {questions.length}
-
-
 						</div>
 						<button onClick={restartQuestion}>Restart Quiz</button>
 
@@ -144,7 +141,7 @@ export default function App() {
 					<br />
 					<div className="instrubutton">
 
-						<button disabled={!isActive} onClick={handleNextQuestion}>{instrButton}</button>
+						<button onClick={handleNextQuestion}>{instrButton}</button>
 					</div>
 				</>
 				)}
